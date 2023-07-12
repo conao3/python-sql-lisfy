@@ -1,3 +1,4 @@
+from typing import Any
 import pydantic
 
 
@@ -7,7 +8,11 @@ class LisfyError(Exception):
     pass
 
 
-class ReaderError(LisfyError):
+class LexerError(LisfyError):
+    pass
+
+
+class ParserError(LisfyError):
     pass
 
 
@@ -19,3 +24,8 @@ class EvalError(LisfyError):
 
 class Token(pydantic.BaseModel):
     name: str
+
+
+class Statement(pydantic.BaseModel):
+    name: str
+    args: list[Any]

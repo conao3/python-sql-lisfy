@@ -22,7 +22,7 @@ def read_char(
     res = next(input_stream, None)
     if res is None:
         if eof_error_p:
-            raise types.ReaderError('Unexpected EOF')
+            raise types.LexerError('Unexpected EOF')
 
         if eof_value is None:
             raise ValueError('eof_value must be specified if eof_error_p is False')
@@ -37,10 +37,10 @@ def skip_whitespace_and_ensure(input_stream: more_itertools.peekable[str], expec
     peek = input_stream.peek(None)
 
     if peek is None:
-        raise types.ReaderError('Unexpected EOF')
+        raise types.LexerError('Unexpected EOF')
 
     if peek != expected:
-        raise types.ReaderError(f'Expected {expected}, but got: {peek}')
+        raise types.LexerError(f'Expected {expected}, but got: {peek}')
 
     next(input_stream)
 
@@ -55,13 +55,13 @@ def ensure_char(
 
     if peek == 'EOF':
         if eof_error_p:
-            raise types.ReaderError('Unexpected EOF')
+            raise types.LexerError('Unexpected EOF')
         return
 
     token = ''.join(more_itertools.take(len(ensure), input_stream))
 
     if token != ensure:
-        raise types.ReaderError(f'Expected {ensure}, but got: {peek}')
+        raise types.LexerError(f'Expected {ensure}, but got: {peek}')
 
 
 def peek_char(
@@ -105,7 +105,7 @@ def peek_char(
 
     if peek is None:
         if eof_error_p:
-            raise types.ReaderError('Unexpected EOF')
+            raise types.LexerError('Unexpected EOF')
 
         if eof_value is None:
             raise ValueError('eof_value must be specified if eof_error_p is False')

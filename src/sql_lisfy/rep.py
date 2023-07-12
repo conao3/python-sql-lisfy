@@ -3,6 +3,8 @@ from typing import Optional
 import more_itertools
 
 from . import lexer
+from . import parser
+from . import types
 
 
 def read(arg: str) -> Optional[str]:
@@ -11,7 +13,13 @@ def read(arg: str) -> Optional[str]:
     if res == []:
         return None
 
-    return str(res)
+    token_stream = more_itertools.peekable(res)
+    eof_statement = types.Statement(name='EOF', args=[])
+    parser_res = parser.read(token_stream, eof_error_p=False, eof_value=eof_statement, recursive_p=False)
+    if parser_res == eof_statement:
+        return None
+
+    return str(parser_res)
 
 
 def eval(arg: Optional[str]) -> Optional[str]:
