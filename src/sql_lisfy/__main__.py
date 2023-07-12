@@ -1,2 +1,12 @@
+from . import rep
+
 def main():
-    print('hello')
+    while True:
+        try:
+            text = input('sql_lisfy> ')
+        except (EOFError, KeyboardInterrupt):
+            break
+
+        res = rep.rep(text)
+        if res:
+            print(res)
