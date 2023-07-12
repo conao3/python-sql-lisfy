@@ -7,7 +7,7 @@ from . import types
 from . import subr
 
 
-TERMINATING_MACRO_CHARS_ = ' "\'(),:;'
+TERMINATING_MACRO_CHARS_ = ' "\'()[],:;'
 OP_CHARS = '+-*/<>=~!@#%^&|`?'
 
 TERMINATING_MACRO_CHARS = TERMINATING_MACRO_CHARS_ + OP_CHARS
@@ -77,6 +77,8 @@ macro_handler: dict[str, Callable[[more_itertools.peekable[str]], types.Token]] 
     "'": read_quote,
     '(': read_single_token,
     ')': read_single_token,
+    '[': read_single_token,
+    ']': read_single_token,
     ',': read_single_token,
     ':': read_single_token,
     ';': read_single_token,
