@@ -22,5 +22,5 @@ def print(arg: Optional[str]) -> Optional[str]:
     return arg
 
 
-def rep(arg: Optional[str]) -> Optional[str]:
+def rep(arg: str) -> Optional[str]:
     return print(eval(read(arg)))
