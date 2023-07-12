@@ -15,11 +15,13 @@ def read(arg: str) -> Optional[str]:
 
 
 def eval(arg: Optional[str]) -> Optional[str]:
-    return arg
+    if arg:
+        return arg
 
 
 def print(arg: Optional[str]) -> Optional[str]:
-    return arg
+    if arg:
+        return arg
 
 
 def rep(arg: str) -> Optional[str]:
