@@ -7,6 +7,26 @@ from . import types
 from . import subr
 
 
+def read_quote(
+    input_stream: more_itertools.peekable[str],
+    eof_error_p: bool = True,
+    eof_value: types.Token = types.Token(name='EOF'),
+    recursive_p: bool = False,
+) -> types.Token:
+    token = ''
+    token += subr.reader.read_char(input_stream, recursive_p=True)  # read starting '
+
+    while True:
+        peek = subr.reader.peek_char(None, input_stream, recursive_p=True)
+        if peek == "'":
+            token += subr.reader.read_char(input_stream, recursive_p=True)  # read ending '
+            break
+
+        token += subr.reader.read_char(input_stream, recursive_p=True)
+
+    return types.Token(name=token)
+
+
 def read_token(
     input_stream: more_itertools.peekable[str],
     eof_error_p: bool = True,
@@ -38,6 +58,11 @@ def read(
         if peek == 'EOF':
             break
 
-        res.append(read_token(input_stream, recursive_p=True))
+        if peek == "'":
+            token = read_quote(input_stream, recursive_p=True)
+        else:
+            token = read_token(input_stream, recursive_p=True)
+
+        res.append(token)
 
     return res
