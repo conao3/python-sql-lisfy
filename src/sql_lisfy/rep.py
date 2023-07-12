@@ -3,13 +3,12 @@ from typing import Optional
 import more_itertools
 
 from . import lexer
-from . import types
 
 
 def read(arg: str) -> Optional[str]:
     stream = more_itertools.peekable(arg)
-    res = lexer.read(stream, eof_error_p=False, eof_value=types.Token(name='EOF'), recursive_p=False)
-    if res.name == 'EOF':
+    res = lexer.read(stream, eof_error_p=False, eof_value=[], recursive_p=False)
+    if res == []:
         return None
 
     return str(res)
