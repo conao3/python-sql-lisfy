@@ -13,6 +13,25 @@ def skip_whitespace(input_stream: more_itertools.peekable[str]) -> None:
         next(input_stream)
 
 
+def read_char(
+    input_stream: more_itertools.peekable[str],
+    eof_error_p: bool = True,
+    eof_value: Optional[str] = None,
+    recursive_p: bool = False,
+) -> str:
+    res = next(input_stream, None)
+    if res is None:
+        if eof_error_p:
+            raise types.ReaderError('Unexpected EOF')
+
+        if eof_value is None:
+            raise ValueError('eof_value must be specified if eof_error_p is False')
+
+        return eof_value
+
+    return res
+
+
 def skip_whitespace_and_ensure(input_stream: more_itertools.peekable[str], expected: str) -> None:
     skip_whitespace(input_stream)
     peek = input_stream.peek(None)
