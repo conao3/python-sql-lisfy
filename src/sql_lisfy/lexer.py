@@ -7,7 +7,10 @@ from . import types
 from . import subr
 
 
-TERMINATING_MACRO_CHARS = ' "\'(),:;'
+TERMINATING_MACRO_CHARS_ = ' "\'(),:;'
+OP_CHARS = '+-*/<>=~!@#%^&|`?'
+
+TERMINATING_MACRO_CHARS = TERMINATING_MACRO_CHARS_ + OP_CHARS
 
 
 def read_quote(input_stream: more_itertools.peekable[str]) -> types.Token:
@@ -57,6 +60,18 @@ def read_token(input_stream: more_itertools.peekable[str]) -> types.Token:
     return types.Token(name=token)
 
 
+def read_op(input_stream: more_itertools.peekable[str]) -> types.Token:
+    token = ''
+    while True:
+        peek = subr.reader.peek_char(None, input_stream, eof_error_p=False, eof_value=' ', recursive_p=True)
+        if peek not in OP_CHARS:
+            break
+
+        token += subr.reader.read_char(input_stream, recursive_p=True)
+
+    return types.Token(name=token)
+
+
 macro_handler: dict[str, Callable[[more_itertools.peekable[str]], types.Token]] = {
     '"': read_double_quote,
     "'": read_quote,
@@ -65,6 +80,23 @@ macro_handler: dict[str, Callable[[more_itertools.peekable[str]], types.Token]] 
     ',': read_single_token,
     ':': read_single_token,
     ';': read_single_token,
+    '+': read_op,
+    '-': read_op,
+    '*': read_op,
+    '/': read_op,
+    '<': read_op,
+    '>': read_op,
+    '=': read_op,
+    '~': read_op,
+    '!': read_op,
+    '@': read_op,
+    '#': read_op,
+    '%': read_op,
+    '^': read_op,
+    '&': read_op,
+    '|': read_op,
+    '`': read_op,
+    '?': read_op,
 }
 
 def read(
