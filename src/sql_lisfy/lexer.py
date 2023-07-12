@@ -25,6 +25,11 @@ def read_quote(input_stream: more_itertools.peekable[str]) -> types.Token:
     return types.Token(name=token)
 
 
+def read_single_token(input_stream: more_itertools.peekable[str]) -> types.Token:
+    token = subr.reader.read_char(input_stream, recursive_p=True)
+    return types.Token(name=token)
+
+
 def read_token(input_stream: more_itertools.peekable[str]) -> types.Token:
     token = ''
     while True:
@@ -40,10 +45,10 @@ def read_token(input_stream: more_itertools.peekable[str]) -> types.Token:
 macro_handler: dict[str, Exception | Callable[[more_itertools.peekable[str]], types.Token]] = {
     '"': NotImplementedError(),
     "'": read_quote,
-    '(': NotImplementedError(),
-    ')': NotImplementedError(),
-    ',': NotImplementedError(),
-    ';': NotImplementedError(),
+    '(': read_single_token,
+    ')': read_single_token,
+    ',': read_single_token,
+    ';': read_single_token,
 }
 
 def read(
