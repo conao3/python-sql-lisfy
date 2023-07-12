@@ -7,7 +7,7 @@ from . import types
 from . import subr
 
 
-TERMINATING_MACRO_CHARS = ' "\'(),;'
+TERMINATING_MACRO_CHARS = ' "\'(),:;'
 
 
 def read_quote(input_stream: more_itertools.peekable[str]) -> types.Token:
@@ -63,6 +63,7 @@ macro_handler: dict[str, Callable[[more_itertools.peekable[str]], types.Token]] 
     '(': read_single_token,
     ')': read_single_token,
     ',': read_single_token,
+    ':': read_single_token,
     ';': read_single_token,
 }
 
