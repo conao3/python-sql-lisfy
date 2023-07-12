@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional
+from typing import Callable, Optional
 
 import more_itertools
 
@@ -7,12 +7,10 @@ from . import types
 from . import subr
 
 
-def read_quote(
-    input_stream: more_itertools.peekable[str],
-    eof_error_p: bool = True,
-    eof_value: types.Token = types.Token(name='EOF'),
-    recursive_p: bool = False,
-) -> types.Token:
+TERMINATING_MACRO_CHARS = ' "\'(),;'
+
+
+def read_quote(input_stream: more_itertools.peekable[str]) -> types.Token:
     token = ''
     token += subr.reader.read_char(input_stream, recursive_p=True)  # read starting '
 
@@ -27,22 +25,26 @@ def read_quote(
     return types.Token(name=token)
 
 
-def read_token(
-    input_stream: more_itertools.peekable[str],
-    eof_error_p: bool = True,
-    eof_value: types.Token = types.Token(name='EOF'),
-    recursive_p: bool = False,
-) -> types.Token:
+def read_token(input_stream: more_itertools.peekable[str]) -> types.Token:
     token = ''
     while True:
         peek = subr.reader.peek_char(None, input_stream, eof_error_p=False, eof_value=' ', recursive_p=True)
-        if peek.isspace():
+        if peek in TERMINATING_MACRO_CHARS:
             break
 
         token += subr.reader.read_char(input_stream, recursive_p=True)
 
     return types.Token(name=token)
 
+
+macro_handler: dict[str, Exception | Callable[[more_itertools.peekable[str]], types.Token]] = {
+    '"': NotImplementedError(),
+    "'": read_quote,
+    '(': NotImplementedError(),
+    ')': NotImplementedError(),
+    ',': NotImplementedError(),
+    ';': NotImplementedError(),
+}
 
 def read(
     input_stream: more_itertools.peekable[str],
@@ -58,11 +60,7 @@ def read(
         if peek == 'EOF':
             break
 
-        if peek == "'":
-            token = read_quote(input_stream, recursive_p=True)
-        else:
-            token = read_token(input_stream, recursive_p=True)
-
-        res.append(token)
+        handler = macro_handler.get(peek, read_token)
+        res.append(handler(input_stream))
 
     return res
