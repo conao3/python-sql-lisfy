@@ -5,6 +5,8 @@ from typing import Optional
 import more_itertools
 
 from . import types
+from . import parsers
+
 
 def read(
     input_stream: more_itertools.peekable[types.Token],
@@ -23,10 +25,4 @@ def read(
 
         return eof_value
 
-    if peek.name == 'select':
-        return types.Statement(
-            name='SELECT',
-            args=[],
-        )
-
-    raise types.ParserError(f'Unexpected token: {peek}')
+    return parsers.read(input_stream)
