@@ -4,7 +4,9 @@ import more_itertools
 
 from .. import types
 
+from .. import parser_subr
 from . import select
+from . import create
 
 
 def read(input_stream: more_itertools.peekable[types.Token]) -> types.Statement:
@@ -13,8 +15,10 @@ def read(input_stream: more_itertools.peekable[types.Token]) -> types.Statement:
     if peek is None:
         raise types.ParserError('Unexpected EOF')
 
-    if peek.name.upper() == 'SELECT':
-        _ = next(input_stream)
+    if parser_subr.expect_token(input_stream, 'SELECT'):
         return select.read(input_stream)
+
+    if parser_subr.expect_token(input_stream, 'CREATE'):
+        return create.read(input_stream)
 
     raise types.ParserError(f'Unexpected token: {peek}')

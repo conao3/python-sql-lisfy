@@ -4,9 +4,9 @@ import more_itertools
 
 from ... import types
 
-from . import index_
+from . import table
 
-TOKENS = ['SELECT']
+TOKENS = ['CREATE']
 
 
 def read(input_stream: more_itertools.peekable[types.Token]) -> types.Statement:
@@ -15,4 +15,4 @@ def read(input_stream: more_itertools.peekable[types.Token]) -> types.Statement:
     if peek is None:
         raise types.ParserError('Unexpected EOF')
 
-    return index_.read(input_stream)
+    return table.read(input_stream)
