@@ -15,5 +15,4 @@ def read(input_stream: more_itertools.peekable[types.Token]) -> types.Statement:
     if peek is None:
         raise types.ParserError('Unexpected EOF')
 
-    _ = next(input_stream)
     return index_.read(input_stream)

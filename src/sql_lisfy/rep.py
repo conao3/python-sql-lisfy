@@ -14,7 +14,7 @@ def read(arg: str) -> Optional[str]:
         return None
 
     token_stream = more_itertools.peekable(res)
-    eof_statement = types.Statement(name='EOF', args=[])
+    eof_statement = types.Statement(name='EOF', args={})
     parser_res = parser.read(token_stream, eof_error_p=False, eof_value=eof_statement, recursive_p=False)
     if parser_res == eof_statement:
         return None

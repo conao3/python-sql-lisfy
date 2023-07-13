@@ -26,6 +26,11 @@ class Token(pydantic.BaseModel):
     name: str
 
 
+class Expression(pydantic.BaseModel):
+    name: str
+    args: dict[str, Any]
+
+
 class Statement(pydantic.BaseModel):
     name: str
-    args: list[Any]
+    args: dict[str, Any]
