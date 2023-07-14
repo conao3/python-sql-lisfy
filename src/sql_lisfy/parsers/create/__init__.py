@@ -4,6 +4,7 @@ import more_itertools
 
 from ... import types
 
+from ... import parser_subr
 from . import table
 
 TOKENS = ['CREATE']
@@ -15,4 +16,7 @@ def read(input_stream: more_itertools.peekable[types.Token]) -> types.Statement:
     if peek is None:
         raise types.ParserError('Unexpected EOF')
 
-    return table.read(input_stream)
+    if parser_subr.expect_token(input_stream, 'TABLE'):
+        return table.read(input_stream)
+
+    raise types.ParserError(f'Unexpected token: {peek}')

@@ -9,6 +9,7 @@ TOKENS = ['TABLE']
 
 def read(input_stream: more_itertools.peekable[types.Token]) -> types.Statement:
     args = {}
+    breakpoint()
 
     return types.Statement(
         name='CREATE TABLE',
