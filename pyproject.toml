@@ -12,7 +12,7 @@ sql-lisfy = "sql_lisfy.__main__:main"
 [tool.poetry.dependencies]
 python = "^3.11"
 pydantic = "^2.14.1"
-more-itertools = "^9.1.0"
+more-itertools = "^11.2.1"
 
 [build-system]
 requires = ["poetry-core"]
