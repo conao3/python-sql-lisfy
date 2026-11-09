@@ -11,7 +11,7 @@ sql-lisfy = "sql_lisfy.__main__:main"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-pydantic = "^2.14.1"
+pydantic = "^2.14.3"
 more-itertools = "^11.2.1"
 
 [build-system]
